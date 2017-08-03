@@ -1,0 +1,31 @@
+ 
+ /* Centre allignment of login/register form*/
+
+h2 {
+    text-align: center;
+	 font-size: 4em;
+	 font-family: "Sans Sarif";
+}
+
+img {
+	display: block;
+    margin: auto;
+    width: 50%;
+}
+
+form {
+	text-align: center;
+}
+
+button {
+	text-align: center;
+	margin:auto;
+	display:block;
+	border-radius: 50%;
+	padding: 14px 40px;
+	font-size: 16px;
+}
+
+
+
+
