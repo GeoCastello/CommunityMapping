@@ -34,11 +34,11 @@ var OpenStreetMap_BlackAndWhite = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-m
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     });
 
-    googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
-        maxZoom: 20,
-        subdomains:['mt0','mt1','mt2','mt3']
-    });
-googleSat.addTo(map)
+var Esri_WorldImagery = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+    maxZoom: 20,
+    subdomains:['mt0','mt1','mt2','mt3']
+});
+Esri_WorldImagery.addTo(map)
 
 var Social = L.geoJson();
 
