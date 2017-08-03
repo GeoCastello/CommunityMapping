@@ -56,6 +56,20 @@
     <title>Community Mapping</title>
   </head>
   <body>
+    <section id="navbar_section" style="display: none">
+      <div class="topnav" id="myTopnav">
+    	  <a href="#menu" onclick="openNav()"> <span style="font-size:1.3em;cursor:pointer">&#9776;</span> </a>
+    	  <img src="img/123.png" width="50em" height="50em"/a>
+    	</div>
+
+    	<div id="mySidenav" class="sidenav">
+    	  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    	  <a onclick="goHome()">Home</a>
+    	  <a onclick="goAbout()">About</a>
+    	  <a onclick="goHelp()">Help</a>
+    	  <a onclick="goContact()">Contact</a>
+    	</div>
+    </section>
     <!-- **************************************** START SECTION ******************************* -->
     <section id="start_section">
       <!-- Insert Sahara Logo -->
@@ -110,19 +124,7 @@
 
     <!-- **************************************** MAP SECTION ******************************* -->
     <section id="map_section" style="display: none">
-    	<div class="topnav" id="myTopnav">
-    	  <a href="#menu" onclick="openNav()"> <span style="font-size:1.3em;cursor:pointer">&#9776;</span> </a>
-    	  <img src="img/123.png" width="50em" height="50em"/a>
-    	</div>
 
-    	<div id="mySidenav" class="sidenav">
-    	  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    	  <a href="index2.html">Home</a>
-    	  <a href="about.html">About</a>
-    	  <a href="HelpPage.html">Help</a>
-    	  <a href="ContactPage.html">Contact</a>
-    	  <a href="#">Historic</a>
-    	</div>
 
       <div id="mapid"></div>
       <button type="button" id="capture_point" class="capture_point"  onclick="select_location()"><img src="img/capture.svg" alt="capture icon"></button>
@@ -149,13 +151,6 @@
         </div>
 
         <div class="right">
-          <!--<input list="types" name="type" id="type" required>
-          <datalist id="types">
-          <option value="Bar">Bar</option>
-          <option value="Taxi rank">Taxi Rank</option>
-          <option value="Hair salon">Hair Salon</option>
-          <option value="Other">Other</option>
-          </datalist></br>-->
 
           <select name="Types" id="typeelement" onchange="yesnoCheck(this);">
             <option value="" selected disabled>Please select</option>
@@ -184,6 +179,171 @@
         <button type="button" id="submit_bttn" class="submit_bttn" onclick="submit_element()">Submit</button>
         <img id = "myImage" class="myImage"></img>
       </form>
+    </section>
+
+    <!-- ***************************************************** ABOUT SECTION *********************************************** -->
+    <section id="about_section" style="display: none">
+
+
+      <h1 id="backtotop">About</h1>
+      <!--Adding container DIV for links to headings-->
+
+
+      <!--Creating headings-->
+      <h3 id='developers'>The Developers</h3>
+      <!--Add text below-->
+
+      <p>
+      The following students of the University of Pretoria and the Hochschule Karlsruhe - University of Applied Sciences were involved in this project. <br>
+      </p>
+
+
+      <div class='photos'>
+
+      <figure id = 'Adrian'>
+      	<img src="img\Adrian.jpg" alt="Adrian" style="width: 250px;height:auto;">
+      	<figcaption>Adrian Castello (HsKA)</figcaption>
+      </figure>
+
+      <figure id = 'Sam'>
+      	<img img src="img\Sam1.jpg" alt="Adrian" style="width:250px;height:auto;">
+      	<figcaption>Sam Chamberlain (UP)</figcaption>
+      </figure>
+
+      <figure id = 'Aneeqa'>
+      	<img id = 'Aneeqa' img src="img\Aneeqa1.jpg" alt="Aneeqa" style="width:250px;height:auto;">
+      	<figcaption>Aneeqa Abrar (HsKA)</figcaption>
+      </figure>
+
+      <figure id = 'Aneeqa'>
+      	<img id = 'Raphael' img src="img\Raph.jpg" alt="Raph" style="width:250px;height:auto;">
+      	<figcaption>Raphael Witt (HsKA)</figcaption>
+      </figure>
+
+        <figure id = 'Amy'>
+      	<img id = 'Amy' img src="img\Amy1.jpg" alt="Amy" style="width:250px;height:auto;">
+      	<figcaption>Amy Wootton (UP)</figcaption>
+      </figure>
+      </div>
+
+      <h3 id='app'>SAHARA: The Application</h3>
+      <!--Add text below-->
+      <p>
+      Topic:<br>
+      Mapping and visualising social gathering nodes within the informal settlement of Alaska, Mamelodi.<br>
+      <br>
+      Aim:<br>
+      To allow for the capture and visualisation of social gathering nodes within Alaska, Mamelodi.
+      </p>
+
+      <h3 id='winterschool'>2017 Winter School held in Pretoria, South Africa</h3>
+      <!--Add text below-->
+      <p>
+      The 2017 Winter Schoool project was funded by the Baden-Württemberg Stiftung within its framework Baden-Württemberg-STIPENDIUM for University students. <br>
+      BWS plus aims to bring students from the technology and innovation region, Baden-Württemberg, together with students from South Africa so that they can benefit <br>
+      from experience and knowledge regarding real-time geomatics at the two institutions. Today, geospatial tools facilitate incorporating geodata when making decisions <br>
+      to the extent that the use of geospatial tools has become natural to many. At the same time, ubiquitous use of smartphones and the Internet prompts participation. <br>
+      <br>
+      The goal of the project is to explore the differences and similarities in relevance and acceptance of citizen participation considering geodata in Europe and in Africa, <br>
+      and to start a long-term partnership and student exchange programme. <br>
+      </p>
+
+      <a href="#backtotop">Back to top</a><br>
+    </section>
+
+    <!-- ******************************************************** CONTACT SECTION ***************************************************** -->
+    <section id="contact_section" style="display: none">
+
+
+      <form name="contact_form" id="contact_form" class="form" action="mailto:u14074657@tuks.co.za" method="get" enctype="text/plain"> <!-- Formular to register -->
+
+        <p class="title_contact">Please fill in your details and we will get back to you!</p>
+        <p class="title_contact">Contact Information:</p>
+
+        <div class="left_contact">
+          <p for="type" class="label_contact">First name:</p><br>
+          <p for="type" class="label_contact_last_name">Last name:</p><br>
+          <p for="type" class="label_contact">Student Number:</p><br>
+          <p for="type" class="label_contact_email">Email address:</p><br>
+        </div>
+
+        <div class="right_contact">
+          <input type="text" name="firstname" placeholder="Mickey"><br>
+          <input type="text" name="lastname" placeholder="Mouse"><br>
+          <input type="text" name="studentnumber" placeholder="u12345678"><br>
+          <input type="text" name="email" placeholder="example@gmail.com"><br>
+        </div>
+
+        <p for="type" class="label_contact">Text:</p>
+        <textarea name="comment" form="usrform" placeholder="Complaint or Comment"></textarea><br>
+        <button type="submit" class="send_bttn" value="Send">Send</button>
+        <button type="reset" class="submit_bttn"value="Reset">Reset</button>
+      </form>
+    </section>
+
+    <!-- ***************************************** HELP SECTION ******************************************** -->
+    <section id="help_section" style="display: none">
+      <!--Help page-->
+
+      <p>Select appropriate link for help:</p>
+      <!--Adding container DIV for links to headings-->
+      <div>
+      <a href="#register">Register</a><br>
+      <a href="#login">Login</a><br>
+      <a href="#capturing">Data Capturing</a><br>
+      <a href="#historic">Historic Functionality</a><br>
+      <a href="#location">Location</a><br>
+      </div>
+      <br>
+      <!--Creating headings-->
+      <h3 id='register'>Registration</h3>
+      <!--Add text below-->
+      <p>
+      When registering, ensure that you insert a valid student number and set a password. <br>
+      Your student number will become your username when logging in.
+      </p>
+
+      <h3 id='login'>Login</h3>
+      <!--Add text below-->
+      <p>
+      Before attempting to login, ensure you have registered. <br>
+      Once registered, set your password and use your valid student number as your username.
+      </p>
+
+      <h3 id='capturing'>Data Capturing</h3>
+      <!--Add text below-->
+      <p>
+      When capturing the data, simply fill out the form and submit it. <br>
+      If the "type" of social gathering that you are capturing is not available, <br>
+      you can add a new type via the "New" link.
+
+      </p>
+
+      <h3 id='historic'>Historic Function</h3>
+      <!--Add text below-->
+      <p>
+      This function allows for the historic visualisation of the captured data. <br>
+      Simply change the date via the drop down box in order to visualise how the captured <br>
+      data has shifted and changed over the years.
+      </p>
+
+      <h3 id='location'>Location</h3>
+      <!--Add text below-->
+      <p>
+      There are two options for capturing the locational data:
+      <br>
+      <br>
+      Option 1: GPS <br>
+      This option sets the location to your phone's GPS co-ordinates.
+      <br>
+      <br>
+
+      Option 2: Manual Selection <br>
+      This option allows for the manual selection of the location. <br>
+      Simply tap on the mobile screen to drop a pin and set the location.
+      </p>
+
+      <a href="#backtotop">Back to top</a><br>
     </section>
 
 

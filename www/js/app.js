@@ -244,6 +244,7 @@ function log_in() {
   password=document.getElementById('password').value;
   if (user!="" && password!="") {
     document.getElementById('start_section').style.display='none';
+    document.getElementById('navbar_section').style.display='block';
     document.getElementById('map_section').style.display='block';
   }
   map._onResize();
@@ -278,6 +279,8 @@ function submit_element() {
   type_element=document.getElementById('typeelement').value;
   if (type_element!="") {
     document.getElementById('map_section').style.display='block';
+    document.getElementById('capturing_section').style.display='none';
+    document.getElementById('myImage').style.display='none';
 
     map.removeLayer(marker);
   }
@@ -340,7 +343,9 @@ x = 0;
                   latitude=latitude_pre;
                   document.getElementById('map_section').style.display='none';
                   document.getElementById('capturing_section').style.display='block';
-                  popup.parentNode.removeChild(accuracy_div);
+                  var map_sec = document.getElementById("map_section");
+                  var div_acc = document.getElementById("acc_div");   // Get the <ul> element with id="myList"
+                  map_sec.removeChild(div_acc);
                 };
 
                 document.getElementById('map_section').appendChild(accuracy_div);
@@ -358,7 +363,7 @@ x = 0;
                     enableHighAccuracy: true,
                   };
 
-                  var watchID=navigator.geolocation.watchPosition(geolocation, onError, options);
+                  watchID=navigator.geolocation.watchPosition(geolocation, onError, options);
 
                   function geolocation(position) {
                     longitude_pre=position.coords.longitude;
@@ -376,13 +381,12 @@ x = 0;
 
 
 
-                var geolocate=setInterval(watchPosition, 5000);
+                geolocate=setInterval(watchPosition, 5000);
 
                 if (accuracy_pre<=5){
                   clearInterval(geolocate);
                   longitude=longitude_pre;
                   latitude=latitude_pre;
-                  setMarker(latitude,longitude);
                 };
 								popup.parentNode.removeChild(popup);
 						};
@@ -392,6 +396,7 @@ x = 0;
     message2.className = 'manual';
     message2.id = 'manual';
    	message2.onclick = function manualSelection(){
+                clearInterval(geolocate);
 								//alert("I am an alert box!");
 								map.on('click', onMapClick);
 								popup.parentNode.removeChild(popup);
@@ -426,6 +431,9 @@ x = 0;
 }
 
 function onMapClick(e) {
+  if (map.hasLayer()) {
+    map.removeLayer(marker);
+  }
   document.getElementById('myImage').style.display="none";
   latitude= e.latlng.lat;
   longitude= e.latlng.lng;
@@ -471,6 +479,9 @@ function onMapClick(e) {
 }
 
 function setMarker(latitude_input, longitude_input) {
+  if (map.hasLayer()) {
+    map.removeLayer(marker);
+  }
 	latitude= latitude_input;
 	longitude= longitude_input;
 
@@ -497,4 +508,36 @@ function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
     //document.getElementById("main").style.marginLeft= "0";
     document.body.style.backgroundColor = "white";
+}
+
+function goHome() {
+  document.getElementById("map_section").style.display = "block";
+  document.getElementById("help_section").style.display = "none";
+  document.getElementById("about_section").style.display = "none";
+  document.getElementById("contact_section").style.display = "none";
+  closeNav();
+}
+
+function goHelp() {
+  document.getElementById("map_section").style.display = "none";
+  document.getElementById("help_section").style.display = "block";
+  document.getElementById("about_section").style.display = "none";
+  document.getElementById("contact_section").style.display = "none";
+  closeNav();
+}
+
+function goAbout() {
+  document.getElementById("map_section").style.display = "none";
+  document.getElementById("help_section").style.display = "none";
+  document.getElementById("about_section").style.display = "block";
+  document.getElementById("contact_section").style.display = "none";
+  closeNav();
+}
+
+function goContact() {
+  document.getElementById("map_section").style.display = "none";
+  document.getElementById("help_section").style.display = "none";
+  document.getElementById("about_section").style.display = "none";
+  document.getElementById("contact_section").style.display = "block";
+  closeNav();
 }
