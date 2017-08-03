@@ -134,7 +134,7 @@
 
     <!-- **************************************** CAPTURING SECTION ******************************* -->
     <section id="capturing_section" style="display: none">
-      <form name="capturing_form" id="capturing_form" class="form" method="get" > <!-- Formular to register -->
+      <form name="capturing_form" action="addpoint.php" method="POST" > <!-- Formular to register -->
         <input type="hidden" name="name_form" id="name_form" value="register_form" />
           <div class="left" >
           <!-- Type of element (datalist) -->
@@ -157,7 +157,7 @@
           <option value="Other">Other</option>
           </datalist></br>-->
 
-          <select name="Types" id="typeelement" onchange="yesnoCheck(this);">
+          <select name="type" id="typeelement" onchange="yesnoCheck(this);">
             <option value="" selected disabled>Please select</option>
             <option value="Taxi Rank">Taxi Rank</option>
             <option value="Hair Salon">Hair Salon</option>
@@ -168,11 +168,14 @@
           </select>
           <input type="text" name="other" id="other" placeholder="What's missing?" style="display: none;" >
 
-          <input type="text" name="date" id="date" placeholder="31/07/2017" disabled></br>
+          <input type="text" name="date" id="date" placeholder="31/07/2017" ></br>
 
-          <input type="text" name="time" id="time" placeholder="08:34" disabled></br>
+          <input type="text" name="time" id="time" placeholder="08:34" ></br>
 
-          <input type="text" name="username" id="usernamecapture" maxlength="50" placeholder="SamCham1" disabled></br>
+          <input type="text" name="username" id="usernamecapture" maxlength="50" placeholder="SamCham1" ></br>
+		  
+		  <input type="hidden" name="latitude" id="latitude"></br>
+		   <input type="hidden" name="longitude" id="longitude"></br>
         </div></br>
 
         <!-- Description (textarea) -->
@@ -181,7 +184,7 @@
 
         <button type="button" id="photo_bttn" class="photo_bttn" onclick="cameraTakePicture()"><img class="camera_img" src="img/camera.svg" alt="capture icon"></button>
 
-        <button type="button" id="submit_bttn" class="submit_bttn" onclick="submit_element()">Submit</button>
+        <input type="submit" id="submit_bttn" class="submit_bttn" value="Submit" />
         <img id = "myImage" class="myImage"></img>
       </form>
     </section>
