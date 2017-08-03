@@ -11,8 +11,8 @@
 	
 	if($db){
 
-	$varlat = pg_escape_string($_POST['latitude_capture']);
-	$varlng = pg_escape_string($_POST['longitude_capture']);
+	$varlat = pg_escape_string($_POST['latitude']);
+	$varlng = pg_escape_string($_POST['longitude']);
 	$type = pg_escape_string($_POST['type']);
 	$date = pg_escape_string($_POST['date']);
 	$time = pg_escape_string($_POST['time']);
