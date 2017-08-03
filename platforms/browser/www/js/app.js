@@ -34,11 +34,11 @@ var OpenStreetMap_BlackAndWhite = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-m
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     });
 
-var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-   maxZoom: 20,
-     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+        maxZoom: 20,
+        subdomains:['mt0','mt1','mt2','mt3']
     });
-Esri_WorldImagery.addTo(map)
+googleSat.addTo(map)
 
 var Social = L.geoJson();
 
@@ -297,7 +297,6 @@ x = 0;
     message1.className = 'GPS';
     message1.id = 'GPS';
     message1.onclick = function GPScoordinates(){
-
                 var longitude_pre;
                 var latitude_pre;
                 var accuracy_pre;
@@ -314,6 +313,29 @@ x = 0;
                 accuracy_button.id = 'acc_bttn';
                 accuracy_button.innerHTML = "CAPTURE";
                 accuracy_button.onclick = function confirmCoordinates(){
+                  var today=new Date();
+                  var dd=today.getDate();
+                  var mm=today.getMonth()+1;
+                  var yyyy=today.getFullYear();
+                  var hh=today.getHours();
+                  var min=today.getMinutes();
+                  if(dd<10) {
+                    dd='0'+dd;
+                  };
+                  if(mm<10) {
+                    mm='0'+mm;
+                  };
+                  if(hh<10) {
+                    hh='0'+hh;
+                  };
+                  if(min<10) {
+                    min='0'+min;
+                  };
+                  var today_date=dd+'/'+mm+'/'+yyyy;
+                  var today_time=hh+':'+min;
+                  document.getElementById('date').value=today_date;
+                  document.getElementById('time').value=today_time;
+                  document.getElementById('usernamecapture').value=user;
                   longitude=longitude_pre;
                   latitude=latitude_pre;
                   document.getElementById('map_section').style.display='none';
@@ -387,6 +409,9 @@ x = 0;
                 };
                 if(hh<10) {
                   hh='0'+hh;
+                };
+                if(min<10) {
+                  min='0'+min;
                 };
                 var today_date=dd+'/'+mm+'/'+yyyy;
                 var today_time=hh+':'+min;
