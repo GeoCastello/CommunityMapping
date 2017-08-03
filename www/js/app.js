@@ -1,4 +1,4 @@
-$(document).ready( function() {
+$(document).ready( function () {
 
 // =============================
 // ========== LEAFLET ==========
@@ -40,10 +40,7 @@ var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/
     });
 Esri_WorldImagery.addTo(map)
 
-var Social = L.geoJson();
-
-
-
+Social = L.geoJson();
 //Load Social GeoJson from Geoserver
 var geoJsonUrl ="http://41.185.27.219:8080/geoserver/dev1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=dev1:registered_items&outputFormat=text/javascript&format_options=callback:registered_items";
 
@@ -75,10 +72,6 @@ function handleJson(data) {
     }
     }).addTo(Social);
 }
-
-
-
-
 
 Social.addTo(map);
 
@@ -268,6 +261,23 @@ function register_done() {
     document.getElementById('regiter_section').style.display='none';
     document.getElementById('start_section').style.display='block';
   }
+
+
+  //********* AJAX SERVER CONNECTION *****************/
+	var firstname = document.getElementById('firstname').value;
+	var lastname =  document.getElementById('lastname').value;
+	var studentnumber =  document.getElementById('studentnumber').value;
+	var passwordregister =  document.getElementById('passwordregister').value;
+
+  var dataString="&firstname="+firstname+"&lastname="+lastname+"&studentnumber="+studentnumber+"&passwordregister="+passwordregister;
+
+  $.ajax({
+		  type: "POST",
+		  url:"http://41.185.27.219/devgroup1/adduser.php",
+		  data: dataString,
+		  crossDomain: true,
+		  cache: false,
+		  });
 }
 
 function back_bttn() {
@@ -285,6 +295,29 @@ function submit_element() {
     map.removeLayer(marker);
   }
   x=0;
+
+  //********* AJAX SERVER CONNECTION *****************/
+  var lat = latitude;
+	var lng = longitude;
+	var type = document.getElementById('typeelement').value;
+	var date =  document.getElementById('date').value;
+	var time =  document.getElementById('time').value;
+	var other =  document.getElementById('other').value;
+	var username =  document.getElementById('usernamecapture').value;
+	var description =  document.getElementById('desc').value;
+
+  var dataString="&latitude="+lat+"&longitude="+lng+"&typeelement="+type+"&date="+date+"&time="+time+"&other="+other+"&username="+username+"&description="+description;
+
+  $.ajax({
+		  type: "POST",
+		  url:"http://41.185.27.219/devgroup1/addpoint.php",
+		  data: dataString,
+		  crossDomain: true,
+		  cache: false,
+		  });
+
+  map.redraw();
+  map._onResize();
 }
 
 
@@ -343,9 +376,6 @@ x = 0;
                   latitude=latitude_pre;
                   document.getElementById('map_section').style.display='none';
                   document.getElementById('capturing_section').style.display='block';
-                  var map_sec = document.getElementById("map_section");
-                  var div_acc = document.getElementById("acc_div");   // Get the <ul> element with id="myList"
-                  map_sec.removeChild(div_acc);
                 };
 
                 document.getElementById('map_section').appendChild(accuracy_div);
@@ -372,6 +402,7 @@ x = 0;
                     setMarker(latitude_pre, longitude_pre);
                     document.getElementById('acc_p').innerHTML='Accuracy: '+accuracy_pre+' m'
                     document.getElementById('acc_bttn').style.display='block';
+                    map.removeLayer(marker);
                   };
 
                   function onError(error) {
@@ -396,7 +427,10 @@ x = 0;
     message2.className = 'manual';
     message2.id = 'manual';
    	message2.onclick = function manualSelection(){
-                clearInterval(geolocate);
+                var map_sec = document.getElementById("map_section");
+                var div_acc = document.getElementById("acc_div");   // Get the <ul> element with id="myList"
+                map_sec.removeChild(div_acc);
+                clearInterval();
 								//alert("I am an alert box!");
 								map.on('click', onMapClick);
 								popup.parentNode.removeChild(popup);
