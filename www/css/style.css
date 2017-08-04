@@ -117,7 +117,7 @@ h1 {
   position: absolute;
   left: 50%;
   margin-right: -50%;
-  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
   z-index: 9999;
   width: 40%;
   height: 3em;
@@ -140,7 +140,7 @@ h1 {
   position: absolute;
   left: 50%;
   margin-right: -50%;
-  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
   z-index: 9999;
   width: 40%;
   height: 3em;
@@ -163,7 +163,7 @@ h1 {
   position: absolute;
   left: 50%;
   margin-right: -50%;
-  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
   z-index: 9999;
   width: 40%;
   height: 3em;
@@ -190,7 +190,7 @@ h1 {
   margin-right: -50%;
   margin-top: 1em;
   margin-bottom: 1em;
-  transform: translate(-50%);
+  -webkit-transform: translate(-50%);
   z-index: 9999;
   width: 40%;
   height: 3em;
@@ -215,7 +215,7 @@ h1 {
   margin-right: -50%;
   margin-top: 5em;
   margin-bottom: 1em;
-  transform: translate(-50%);
+  -webkit-transform: translate(-50%);
   z-index: 9999;
   width: 40%;
   height: 3em;
@@ -246,7 +246,7 @@ button:active {
   position: absolute;
   left: 50%;
   margin-right: -50%;
-  transform: translate(-50%, 10%);
+  -webkit-transform: translate(-50%, 10%);
 }
 
 #login_form {
@@ -301,7 +301,7 @@ a:active {
   margin-right: -50%;
   margin-top: 19em;
   margin-bottom: 1em;
-  transform: translate(-50%);
+  -webkit-transform: translate(-50%);
   z-index: 9999;
   width: 40%;
   height: 3em;
@@ -325,7 +325,7 @@ a:active {
   float: left;
   left: 50%;
   margin-right: -50%;
-  transform: translate(-50%);
+  -webkit-transform: translate(-50%);
 }
 
 
@@ -715,7 +715,7 @@ body {
     z-index: 99999999;
     left: 50%;
     margin-right: -50%;
-    transform: translate(-50%, 290%);
+    -webkit-transform: translate(-50%, 290%);
     width:15em;
     height:8em;
     font: bold 1em verdana, sans-serif;
@@ -733,7 +733,7 @@ body {
   z-index: 99999999999;
   left: 50%;
   margin-right: -50%;
-  transform: translate(-50%, 290%);
+  -webkit-transform: translate(-50%, 290%);
   width:15em;
   height:8em;
   font: bold 1em verdana, sans-serif;
@@ -750,7 +750,7 @@ body {
   position:absolute;
   left: 50%;
   margin-right: -50%;
-  transform: translate(-50%);
+  -webkit-transform: translate(-50%);
 }
 
 
@@ -775,5 +775,5 @@ body {
   top: 6em;
   left: 50%;
   margin-right: -50%;
-  transform: translate(-50%);
+  -webkit-transform: translate(-50%);
 }
