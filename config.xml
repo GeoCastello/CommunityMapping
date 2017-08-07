@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.community.mapping" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>HelloCordova</name>
+    <name>SAHARA</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        Community Mapping App
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="sahara.mappers@gmail.com" href="http://cordova.io">
+        Group 3 Winter School 2017: Adrián Castelló, Sam Chamberlain, Aneeqa Abrar, Raphael Witt, Amy Wootton
     </author>
     <content src="index.html" />
     <access origin="*" />

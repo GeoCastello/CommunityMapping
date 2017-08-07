@@ -9,14 +9,10 @@
 	echo db;
 
 	if($db){
-	$varlat = pg_escape_string($_POST['latitude']);
-	$varlng = pg_escape_string($_POST['longitude']);
-	$type = pg_escape_string($_POST['typeelement']);
-	$date = pg_escape_string($_POST['date']);
-	$time = pg_escape_string($_POST['time']);
-	$other = pg_escape_string($_POST['other']);
-	$username = pg_escape_string($_POST['username']);
-	$description = pg_escape_string($_POST['description']);
+	$firstname = pg_escape_string($_POST['firstname']);
+	$lastname = pg_escape_string($_POST['lastname']);
+	$studentnumber = pg_escape_string($_POST['studentnumber']);
+	$passwordregister = pg_escape_string($_POST['passwordregister']);
 
 	/*IF (@type = 'Other') then @type = '$other' else '$type'
 
@@ -25,7 +21,7 @@
 */
 
 
-	$query1 = "INSERT INTO registered_items(type, date, time, username, description, geom) VALUES ('$type', '$date', '$time', '$username', '$description', ST_GeomFromText('POINT($varlng $varlat)', 4326))";
+	$query1 = "INSERT INTO users(firstname, lastname, studentnumber, password) VALUES ('$firstname', '$lastname', '$studentnumber', '$passwordregister')";
 	//$query1 = "INSERT INTO registered_items(type, date, time, username, description, picture, geom)VALUES ('type', 'test3', 'test2', 'test2', 'test2', 'test2', ST_GeomFromText('POINT(20 20)',4326))";
 	$result = pg_query($query1);}
 	echo $query1;
@@ -36,7 +32,7 @@
 
       exit();
   }
-  printf ("This point was inserted into the database");
+  printf ("This user was registered into the database");
   pg_close();
 	header("Location: index.html");
 	exit;

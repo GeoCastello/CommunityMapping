@@ -1,4 +1,4 @@
-$(document).ready( function() {
+$(document).ready( function () {
 
 // =============================
 // ========== LEAFLET ==========
@@ -40,10 +40,7 @@ var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/
     });
 Esri_WorldImagery.addTo(map)
 
-var Social = L.geoJson();
-
-
-
+Social = L.geoJson();
 //Load Social GeoJson from Geoserver
 var geoJsonUrl ="http://41.185.27.219:8080/geoserver/dev1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=dev1:registered_items&outputFormat=text/javascript&format_options=callback:registered_items";
 
@@ -75,10 +72,6 @@ function handleJson(data) {
     }
     }).addTo(Social);
 }
-
-
-
-
 
 Social.addTo(map);
 
@@ -137,10 +130,6 @@ textPlaceholder: 'Search by type    ',
         });
 
 map.addControl(searchControl);
-
-
-
-
 
 function showCoordinates(e) {
     alert(e.latlng);
@@ -244,6 +233,7 @@ function log_in() {
   password=document.getElementById('password').value;
   if (user!="" && password!="") {
     document.getElementById('start_section').style.display='none';
+    document.getElementById('navbar_section').style.display='block';
     document.getElementById('map_section').style.display='block';
   }
   map._onResize();
@@ -267,6 +257,23 @@ function register_done() {
     document.getElementById('regiter_section').style.display='none';
     document.getElementById('start_section').style.display='block';
   }
+
+
+  //********* AJAX SERVER CONNECTION *****************/
+	var firstname = document.getElementById('firstname').value;
+	var lastname =  document.getElementById('lastname').value;
+	var studentnumber =  document.getElementById('studentnumber').value;
+	var passwordregister =  document.getElementById('passwordregister').value;
+
+  var dataString="&firstname="+firstname+"&lastname="+lastname+"&studentnumber="+studentnumber+"&passwordregister="+passwordregister;
+
+  $.ajax({
+		  type: "POST",
+		  url:"http://41.185.27.219/devgroup1/adduser.php",
+		  data: dataString,
+		  crossDomain: true,
+		  cache: false,
+		  });
 }
 
 function back_bttn() {
@@ -278,10 +285,45 @@ function submit_element() {
   type_element=document.getElementById('typeelement').value;
   if (type_element!="") {
     document.getElementById('map_section').style.display='block';
+    document.getElementById('capturing_section').style.display='none';
+    document.getElementById('myImage').style.display='none';
 
     map.removeLayer(marker);
   }
+
   x=0;
+
+  //********* AJAX SERVER CONNECTION *****************/
+  var lat = latitude;
+	var lng = longitude;
+	var type = document.getElementById('typeelement').value;
+	var date =  document.getElementById('date').value;
+	var time =  document.getElementById('time').value;
+	var other =  document.getElementById('other').value;
+	var username =  document.getElementById('usernamecapture').value;
+	var description =  document.getElementById('desc').value;
+
+  var dataString="&latitude="+lat+"&longitude="+lng+"&typeelement="+type+"&date="+date+"&time="+time+"&other="+other+"&username="+username+"&description="+description;
+
+  $.ajax({
+		  type: "POST",
+		  url:"http://41.185.27.219/devgroup1/addpoint.php",
+		  data: dataString,
+		  crossDomain: true,
+		  cache: false,
+		  });
+
+  map.redraw();
+  map._onResize();
+}
+
+function capture_back() {
+  x=0;
+  document.getElementById('map_section').style.display='block';
+  document.getElementById('capturing_section').style.display='none';
+  document.getElementById('myImage').style.display='none';
+
+  map.removeLayer(marker);
 }
 
 
@@ -297,7 +339,6 @@ x = 0;
     message1.className = 'GPS';
     message1.id = 'GPS';
     message1.onclick = function GPScoordinates(){
-
                 var longitude_pre;
                 var latitude_pre;
                 var accuracy_pre;
@@ -314,11 +355,33 @@ x = 0;
                 accuracy_button.id = 'acc_bttn';
                 accuracy_button.innerHTML = "CAPTURE";
                 accuracy_button.onclick = function confirmCoordinates(){
+                  var today=new Date();
+                  var dd=today.getDate();
+                  var mm=today.getMonth()+1;
+                  var yyyy=today.getFullYear();
+                  var hh=today.getHours();
+                  var min=today.getMinutes();
+                  if(dd<10) {
+                    dd='0'+dd;
+                  };
+                  if(mm<10) {
+                    mm='0'+mm;
+                  };
+                  if(hh<10) {
+                    hh='0'+hh;
+                  };
+                  if(min<10) {
+                    min='0'+min;
+                  };
+                  var today_date=dd+'/'+mm+'/'+yyyy;
+                  var today_time=hh+':'+min;
+                  document.getElementById('date').value=today_date;
+                  document.getElementById('time').value=today_time;
+                  document.getElementById('usernamecapture').value=user;
                   longitude=longitude_pre;
                   latitude=latitude_pre;
                   document.getElementById('map_section').style.display='none';
                   document.getElementById('capturing_section').style.display='block';
-                  popup.parentNode.removeChild(accuracy_div);
                 };
 
                 document.getElementById('map_section').appendChild(accuracy_div);
@@ -336,7 +399,7 @@ x = 0;
                     enableHighAccuracy: true,
                   };
 
-                  var watchID=navigator.geolocation.watchPosition(geolocation, onError, options);
+                  watchID=navigator.geolocation.watchPosition(geolocation, onError, options);
 
                   function geolocation(position) {
                     longitude_pre=position.coords.longitude;
@@ -345,6 +408,7 @@ x = 0;
                     setMarker(latitude_pre, longitude_pre);
                     document.getElementById('acc_p').innerHTML='Accuracy: '+accuracy_pre+' m'
                     document.getElementById('acc_bttn').style.display='block';
+                    map.removeLayer(marker);
                   };
 
                   function onError(error) {
@@ -354,13 +418,12 @@ x = 0;
 
 
 
-                var geolocate=setInterval(watchPosition, 5000);
+                geolocate=setInterval(watchPosition, 5000);
 
                 if (accuracy_pre<=5){
                   clearInterval(geolocate);
                   longitude=longitude_pre;
                   latitude=latitude_pre;
-                  setMarker(latitude,longitude);
                 };
 								popup.parentNode.removeChild(popup);
 						};
@@ -370,6 +433,13 @@ x = 0;
     message2.className = 'manual';
     message2.id = 'manual';
    	message2.onclick = function manualSelection(){
+                var map_sec = document.getElementById("map_section");
+                var div_acc = document.getElementById("acc_div");   // Get the <ul> element with id="myList"
+                if (div_acc) {
+                  map_sec.removeChild(div_acc);
+                }
+
+                clearInterval();
 								//alert("I am an alert box!");
 								map.on('click', onMapClick);
 								popup.parentNode.removeChild(popup);
@@ -388,6 +458,9 @@ x = 0;
                 if(hh<10) {
                   hh='0'+hh;
                 };
+                if(min<10) {
+                  min='0'+min;
+                };
                 var today_date=dd+'/'+mm+'/'+yyyy;
                 var today_time=hh+':'+min;
                 document.getElementById('date').value=today_date;
@@ -401,6 +474,9 @@ x = 0;
 }
 
 function onMapClick(e) {
+  if (map.hasLayer()) {
+    map.removeLayer(marker);
+  }
   document.getElementById('myImage').style.display="none";
   latitude= e.latlng.lat;
   longitude= e.latlng.lng;
@@ -446,6 +522,9 @@ function onMapClick(e) {
 }
 
 function setMarker(latitude_input, longitude_input) {
+  if (map.hasLayer()) {
+    map.removeLayer(marker);
+  }
 	latitude= latitude_input;
 	longitude= longitude_input;
 
@@ -472,4 +551,36 @@ function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
     //document.getElementById("main").style.marginLeft= "0";
     document.body.style.backgroundColor = "white";
+}
+
+function goHome() {
+  document.getElementById("map_section").style.display = "block";
+  document.getElementById("help_section").style.display = "none";
+  document.getElementById("about_section").style.display = "none";
+  document.getElementById("contact_section").style.display = "none";
+  closeNav();
+}
+
+function goHelp() {
+  document.getElementById("map_section").style.display = "none";
+  document.getElementById("help_section").style.display = "block";
+  document.getElementById("about_section").style.display = "none";
+  document.getElementById("contact_section").style.display = "none";
+  closeNav();
+}
+
+function goAbout() {
+  document.getElementById("map_section").style.display = "none";
+  document.getElementById("help_section").style.display = "none";
+  document.getElementById("about_section").style.display = "block";
+  document.getElementById("contact_section").style.display = "none";
+  closeNav();
+}
+
+function goContact() {
+  document.getElementById("map_section").style.display = "none";
+  document.getElementById("help_section").style.display = "none";
+  document.getElementById("about_section").style.display = "none";
+  document.getElementById("contact_section").style.display = "block";
+  closeNav();
 }

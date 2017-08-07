@@ -1,4 +1,4 @@
-$(document).ready( function() {
+$(document).ready( function () {
 
 // =============================
 // ========== LEAFLET ==========
@@ -40,10 +40,7 @@ var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/
     });
 Esri_WorldImagery.addTo(map)
 
-var Social = L.geoJson();
-
-
-
+Social = L.geoJson();
 //Load Social GeoJson from Geoserver
 var geoJsonUrl ="http://41.185.27.219:8080/geoserver/dev1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=dev1:registered_items&outputFormat=text/javascript&format_options=callback:registered_items";
 
@@ -75,10 +72,6 @@ function handleJson(data) {
     }
     }).addTo(Social);
 }
-
-
-
-
 
 Social.addTo(map);
 
@@ -138,12 +131,460 @@ textPlaceholder: 'Search by type    ',
 
 map.addControl(searchControl);
 
-
-
-
-
 function showCoordinates(e) {
     alert(e.latlng);
 }
 
 });
+
+//****************************** INDEX PAGE *****************************************************/
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+var app = {
+
+    // Application Constructor
+    initialize: function() {
+        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+    },
+
+    // deviceready Event Handler
+    //
+    // Bind any cordova events here. Common events are:
+    // 'pause', 'resume', etc.
+    onDeviceReady: function() {
+        this.receivedEvent('deviceready');
+        document.getElementById("cameraTakePicture").addEventListener("click", cameraTakePicture);
+    },
+
+    // Update DOM on a Received Event
+    receivedEvent: function(id) {
+        var parentElement = document.getElementById(id);
+        var listeningElement = parentElement.querySelector('.listening');
+        var receivedElement = parentElement.querySelector('.received');
+
+        listeningElement.setAttribute('style', 'display:none;');
+        receivedElement.setAttribute('style', 'display:block;');
+
+        console.log('Received Event: ' + id);
+    }
+
+
+};
+
+app.initialize();
+
+
+function yesnoCheck(that) {
+  if (that.value == "Other") {
+    document.getElementById("other").style.display = "block";
+    document.getElementById("OtherLabel").style.display = "block";
+  } else {
+    document.getElementById("other").style.display = "none";
+    document.getElementById("OtherLabel").style.display = "none";
+  }
+}
+
+function cameraTakePicture() {
+  document.getElementById("submit_bttn").style.display = "none";
+   navigator.camera.getPicture(onSuccess, onFail, {
+      quality: 50,
+      destinationType: Camera.DestinationType.DATA_URL
+   });
+
+   function onSuccess(imageData) {
+      var image = document.getElementById('myImage');
+      image.src = "data:image/jpeg;base64," + imageData;
+      document.getElementById("myImage").style.display = "block";
+   }
+
+   function onFail(message) {
+      alert('Failed because: ' + message);
+   }
+}
+
+//****************************** START PAGE *****************************************************/
+function sign_in() {
+  var $login_form=$('#login_form').addClass('display');
+  setTimeout(function() {
+    $login_form.addClass('show');
+  });
+
+  document.getElementById('button_div').style.display='none';
+};
+
+function log_in() {
+  user=document.getElementById('username').value;
+  password=document.getElementById('password').value;
+  if (user!="" && password!="") {
+    document.getElementById('start_section').style.display='none';
+    document.getElementById('navbar_section').style.display='block';
+    document.getElementById('map_section').style.display='block';
+  }
+  map._onResize();
+}
+
+function register() {
+  document.getElementById('start_section').style.display='none';
+  document.getElementById('regiter_section').style.display='block';
+  document.getElementById('firstname').value="";
+  document.getElementById('lastname').value="";
+  document.getElementById('studentnumber').value="";
+  document.getElementById('passwordregister').value="";
+}
+
+function register_done() {
+  first_name=document.getElementById('firstname').value;
+  second_name=document.getElementById('lastname').value;
+  student_number=document.getElementById('studentnumber').value;
+  password=document.getElementById('passwordregister').value;
+  if (first_name!="" && second_name!="" && student_number!="" && password!="") {
+    document.getElementById('regiter_section').style.display='none';
+    document.getElementById('start_section').style.display='block';
+  }
+
+
+  //********* AJAX SERVER CONNECTION *****************/
+	var firstname = document.getElementById('firstname').value;
+	var lastname =  document.getElementById('lastname').value;
+	var studentnumber =  document.getElementById('studentnumber').value;
+	var passwordregister =  document.getElementById('passwordregister').value;
+
+  var dataString="&firstname="+firstname+"&lastname="+lastname+"&studentnumber="+studentnumber+"&passwordregister="+passwordregister;
+
+  $.ajax({
+		  type: "POST",
+		  url:"http://41.185.27.219/devgroup1/adduser.php",
+		  data: dataString,
+		  crossDomain: true,
+		  cache: false,
+		  });
+}
+
+function back_bttn() {
+  document.getElementById('regiter_section').style.display='none';
+  document.getElementById('start_section').style.display='block';
+}
+
+function submit_element() {
+  type_element=document.getElementById('typeelement').value;
+  if (type_element!="") {
+    document.getElementById('map_section').style.display='block';
+    document.getElementById('capturing_section').style.display='none';
+    document.getElementById('myImage').style.display='none';
+
+    map.removeLayer(marker);
+  }
+
+  x=0;
+
+  //********* AJAX SERVER CONNECTION *****************/
+  var lat = latitude;
+	var lng = longitude;
+	var type = document.getElementById('typeelement').value;
+	var date =  document.getElementById('date').value;
+	var time =  document.getElementById('time').value;
+	var other =  document.getElementById('other').value;
+	var username =  document.getElementById('usernamecapture').value;
+	var description =  document.getElementById('desc').value;
+
+  var dataString="&latitude="+lat+"&longitude="+lng+"&typeelement="+type+"&date="+date+"&time="+time+"&other="+other+"&username="+username+"&description="+description;
+
+  $.ajax({
+		  type: "POST",
+		  url:"http://41.185.27.219/devgroup1/addpoint.php",
+		  data: dataString,
+		  crossDomain: true,
+		  cache: false,
+		  });
+
+  map.redraw();
+  map._onResize();
+}
+
+function capture_back() {
+  x=0;
+  document.getElementById('map_section').style.display='block';
+  document.getElementById('capturing_section').style.display='none';
+  document.getElementById('myImage').style.display='none';
+
+  map.removeLayer(marker);
+}
+
+
+//****************************** LOCATION SELECTION *********************************************/
+x = 0;
+ function select_location(){
+  	var popup = document.createElement('div');
+    popup.className = 'locationsetting';
+    popup.id = 'locationsetting';
+
+    var message1 = document.createElement('div');
+    message1.innerHTML = "GPS";
+    message1.className = 'GPS';
+    message1.id = 'GPS';
+    message1.onclick = function GPScoordinates(){
+                var longitude_pre;
+                var latitude_pre;
+                var accuracy_pre;
+
+                var accuracy_div = document.createElement('div');
+                accuracy_div.className = 'locationsetting';
+                accuracy_div.id = 'acc_div';
+                var accuracy_p = document.createElement('div');
+                accuracy_p.className = 'acc_p';
+                accuracy_p.id = 'acc_p';
+
+                var accuracy_button = document.createElement('div');
+                accuracy_button.className = 'acc_bttn';
+                accuracy_button.id = 'acc_bttn';
+                accuracy_button.innerHTML = "CAPTURE";
+                accuracy_button.onclick = function confirmCoordinates(){
+                  var today=new Date();
+                  var dd=today.getDate();
+                  var mm=today.getMonth()+1;
+                  var yyyy=today.getFullYear();
+                  var hh=today.getHours();
+                  var min=today.getMinutes();
+                  if(dd<10) {
+                    dd='0'+dd;
+                  };
+                  if(mm<10) {
+                    mm='0'+mm;
+                  };
+                  if(hh<10) {
+                    hh='0'+hh;
+                  };
+                  if(min<10) {
+                    min='0'+min;
+                  };
+                  var today_date=dd+'/'+mm+'/'+yyyy;
+                  var today_time=hh+':'+min;
+                  document.getElementById('date').value=today_date;
+                  document.getElementById('time').value=today_time;
+                  document.getElementById('usernamecapture').value=user;
+                  longitude=longitude_pre;
+                  latitude=latitude_pre;
+                  document.getElementById('map_section').style.display='none';
+                  document.getElementById('capturing_section').style.display='block';
+                };
+
+                document.getElementById('map_section').appendChild(accuracy_div);
+                document.getElementById('acc_div').appendChild(accuracy_p);
+                document.getElementById('acc_div').appendChild(accuracy_button);
+                document.getElementById('acc_bttn').style.display='none';
+                document.getElementById('capturing_section').style.display='block';
+
+                document.getElementById('acc_p').innerHTML='Wait for accuracy';
+
+                function watchPosition() {
+                  var options = {
+                    enableHighAccuracy: true,
+                    maximumAge: 3600000,
+                    enableHighAccuracy: true,
+                  };
+
+                  watchID=navigator.geolocation.watchPosition(geolocation, onError, options);
+
+                  function geolocation(position) {
+                    longitude_pre=position.coords.longitude;
+                    latitude_pre=position.coords.latitude;
+                    accuracy_pre=position.coords.accuracy;
+                    setMarker(latitude_pre, longitude_pre);
+                    var acc_box=document.getElementById('acc_p');
+                    if (acc_box) {
+                      document.getElementById('acc_p').innerHTML='Accuracy: '+accuracy_pre+' m'
+                      document.getElementById('acc_bttn').style.display='block';
+                    }
+
+                  };
+
+                  function onError(error) {
+                    alert('code: '+error.code+'\n'+'message: '+error.message+'\n');
+                  }
+                };
+
+
+
+                geolocate=setInterval(watchPosition, 5000);
+								popup.parentNode.removeChild(popup);
+						};
+
+    var message2 = document.createElement('div');
+    message2.innerHTML = "Manual Selection";
+    message2.className = 'manual';
+    message2.id = 'manual';
+   	message2.onclick = function manualSelection(){
+                var map_sec = document.getElementById("map_section");
+                var div_acc = document.getElementById("acc_div");   // Get the <ul> element with id="myList"
+                if (div_acc) {
+                  map_sec.removeChild(div_acc);
+                }
+
+                if (map.hasLayer()) {
+                  map.removeLayer(marker);
+                }
+
+                if (geolocate) {
+                  clearInterval(geolocate);
+                  navigator.geolocation.clearWatch(watchID);
+                }
+
+								map.on('click', onMapClick);
+								popup.parentNode.removeChild(popup);
+                var today=new Date();
+                var dd=today.getDate();
+                var mm=today.getMonth()+1;
+                var yyyy=today.getFullYear();
+                var hh=today.getHours();
+                var min=today.getMinutes();
+                if(dd<10) {
+                  dd='0'+dd;
+                };
+                if(mm<10) {
+                  mm='0'+mm;
+                };
+                if(hh<10) {
+                  hh='0'+hh;
+                };
+                if(min<10) {
+                  min='0'+min;
+                };
+                var today_date=dd+'/'+mm+'/'+yyyy;
+                var today_time=hh+':'+min;
+                document.getElementById('date').value=today_date;
+                document.getElementById('time').value=today_time;
+                document.getElementById('usernamecapture').value=user;
+						};
+
+    popup.appendChild(message1);
+    popup.appendChild(message2);
+    document.body.appendChild(popup);
+}
+
+function onMapClick(e) {
+  if (map.hasLayer()) {
+    map.removeLayer(marker);
+  }
+  document.getElementById('myImage').style.display="none";
+  latitude= e.latlng.lat;
+  longitude= e.latlng.lng;
+  x++;
+  if (x <=1) {
+    myIcon = L.icon({
+  	iconUrl: 'img/capturewhite.svg',
+  	iconSize: [20, 20]
+  });
+
+  var popup = document.createElement('div');
+  popup.className = 'locationsetting';
+  popup.id = 'digitalizeoptions';
+
+  var message1 = document.createElement('div');
+  message1.innerHTML = "SUBMIT";
+  message1.className = 'GPS';
+  message1.id = 'GPS';
+  message1.onclick = function showCapturingForm(){
+              document.getElementById('map_section').style.display='none';
+              document.getElementById('capturing_section').style.display='block';
+              popup.parentNode.removeChild(popup);
+              x++;
+          };
+
+  var message2 = document.createElement('div');
+  message2.innerHTML = "DELETE";
+  message2.className = 'manual';
+  message2.id = 'manual';
+  message2.onclick = function removeMarker(){
+              //alert("I am an alert box!");
+              map.removeLayer(marker);
+              popup.parentNode.removeChild(popup);
+              x=0;
+          };
+
+  popup.appendChild(message1);
+  popup.appendChild(message2);
+  document.body.appendChild(popup);
+
+  marker=L.marker([latitude, longitude],{icon: myIcon}).bindPopup(popup).addTo(map);
+  }
+}
+
+function setMarker(latitude_input, longitude_input) {
+  if (map.hasLayer()) {
+    map.removeLayer(marker);
+  }
+	latitude= latitude_input;
+	longitude= longitude_input;
+
+	myIcon = L.icon({
+		iconUrl: 'img/capturewhite.svg',
+		iconSize: [20, 20]
+	});
+
+
+	marker=L.marker([latitude, longitude],{icon: myIcon}).addTo(map);
+
+  map.setView([latitude, longitude], 19);
+}
+
+//************************************ SIDE MENU ***********************************/
+/* Set the width of the side navigation to 250px and the left margin of the page content to 250px and add a black background color to body */
+function openNav() {
+    document.getElementById("mySidenav").style.width = "230px";
+    //document.getElementById("main").style.marginLeft = "250px";
+    document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    //document.getElementById("main").style.marginLeft= "0";
+    document.body.style.backgroundColor = "white";
+}
+
+function goHome() {
+  document.getElementById("map_section").style.display = "block";
+  document.getElementById("help_section").style.display = "none";
+  document.getElementById("about_section").style.display = "none";
+  document.getElementById("contact_section").style.display = "none";
+  closeNav();
+}
+
+function goHelp() {
+  document.getElementById("map_section").style.display = "none";
+  document.getElementById("help_section").style.display = "block";
+  document.getElementById("about_section").style.display = "none";
+  document.getElementById("contact_section").style.display = "none";
+  closeNav();
+}
+
+function goAbout() {
+  document.getElementById("map_section").style.display = "none";
+  document.getElementById("help_section").style.display = "none";
+  document.getElementById("about_section").style.display = "block";
+  document.getElementById("contact_section").style.display = "none";
+  closeNav();
+}
+
+function goContact() {
+  document.getElementById("map_section").style.display = "none";
+  document.getElementById("help_section").style.display = "none";
+  document.getElementById("about_section").style.display = "none";
+  document.getElementById("contact_section").style.display = "block";
+  closeNav();
+}

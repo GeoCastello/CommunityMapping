@@ -35,7 +35,7 @@ var OpenStreetMap_BlackAndWhite = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-m
     });
 
 var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-   maxZoom: 20,
+   maxZoom: 19,
      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     });
 Esri_WorldImagery.addTo(map)
@@ -130,10 +130,6 @@ textPlaceholder: 'Search by type    ',
         });
 
 map.addControl(searchControl);
-
-
-
-
 
 function showCoordinates(e) {
     alert(e.latlng);
@@ -294,6 +290,7 @@ function submit_element() {
 
     map.removeLayer(marker);
   }
+
   x=0;
 
   //********* AJAX SERVER CONNECTION *****************/
@@ -318,6 +315,15 @@ function submit_element() {
 
   map.redraw();
   map._onResize();
+}
+
+function capture_back() {
+  x=0;
+  document.getElementById('map_section').style.display='block';
+  document.getElementById('capturing_section').style.display='none';
+  document.getElementById('myImage').style.display='none';
+
+  map.removeLayer(marker);
 }
 
 
@@ -398,11 +404,14 @@ x = 0;
                   function geolocation(position) {
                     longitude_pre=position.coords.longitude;
                     latitude_pre=position.coords.latitude;
-                    accuracy_pre=position.coords.accuracy;
+                    accuracy_pre=position.coords.accuracy.toFixed(3);
                     setMarker(latitude_pre, longitude_pre);
-                    document.getElementById('acc_p').innerHTML='Accuracy: '+accuracy_pre+' m'
-                    document.getElementById('acc_bttn').style.display='block';
-                    map.removeLayer(marker);
+                    var acc_box=document.getElementById('acc_p');
+                    if (acc_box) {
+                      document.getElementById('acc_p').innerHTML='Accuracy: '+accuracy_pre+' m'
+                      document.getElementById('acc_bttn').style.display='block';
+                    }
+
                   };
 
                   function onError(error) {
@@ -413,12 +422,6 @@ x = 0;
 
 
                 geolocate=setInterval(watchPosition, 5000);
-
-                if (accuracy_pre<=5){
-                  clearInterval(geolocate);
-                  longitude=longitude_pre;
-                  latitude=latitude_pre;
-                };
 								popup.parentNode.removeChild(popup);
 						};
 
@@ -427,11 +430,15 @@ x = 0;
     message2.className = 'manual';
     message2.id = 'manual';
    	message2.onclick = function manualSelection(){
+                if (map.hasLayer()) {
+                  map.removeLayer(marker);
+                }
                 var map_sec = document.getElementById("map_section");
                 var div_acc = document.getElementById("acc_div");   // Get the <ul> element with id="myList"
-                map_sec.removeChild(div_acc);
-                clearInterval();
-								//alert("I am an alert box!");
+                if (div_acc) {
+                  map_sec.removeChild(div_acc);
+                }
+
 								map.on('click', onMapClick);
 								popup.parentNode.removeChild(popup);
                 var today=new Date();
@@ -478,7 +485,7 @@ function onMapClick(e) {
   	iconSize: [20, 20]
   });
 
-  var popup = document.createElement('div');
+  popup = document.createElement('div');
   popup.className = 'locationsetting';
   popup.id = 'digitalizeoptions';
 
@@ -545,33 +552,77 @@ function closeNav() {
 }
 
 function goHome() {
+  if (map.hasLayer()) {
+    map.removeLayer(marker);
+  }
+  x=0;
   document.getElementById("map_section").style.display = "block";
   document.getElementById("help_section").style.display = "none";
   document.getElementById("about_section").style.display = "none";
   document.getElementById("contact_section").style.display = "none";
+  document.getElementById("capturing_form").style.display = "none";
   closeNav();
 }
 
 function goHelp() {
+  if (map.hasLayer()) {
+    map.removeLayer(marker);
+  }
+  x=0;
   document.getElementById("map_section").style.display = "none";
   document.getElementById("help_section").style.display = "block";
   document.getElementById("about_section").style.display = "none";
   document.getElementById("contact_section").style.display = "none";
+  document.getElementById("capturing_form").style.display = "none";
+  var popup_choose=document.getElementById('locationsetting')
+  if (popup_choose) {
+    popup_choose.parentNode.removeChild(popup_choose);
+  }
+  var popup_submit=document.getElementById('digitalizeoptions')
+  if (popup_submit) {
+    popup_submit.parentNode.removeChild(popup_submit);
+  }
   closeNav();
 }
 
 function goAbout() {
+  if (map.hasLayer()) {
+    map.removeLayer(marker);
+  }
+  x=0;
   document.getElementById("map_section").style.display = "none";
   document.getElementById("help_section").style.display = "none";
   document.getElementById("about_section").style.display = "block";
   document.getElementById("contact_section").style.display = "none";
+  document.getElementById("capturing_form").style.display = "none";
+  var popup_choose=document.getElementById('locationsetting')
+  if (popup_choose) {
+    popup_choose.parentNode.removeChild(popup_choose);
+  }
+  var popup_submit=document.getElementById('digitalizeoptions')
+  if (popup_submit) {
+    popup_submit.parentNode.removeChild(popup_submit);
+  }
   closeNav();
 }
 
 function goContact() {
+  if (map.hasLayer()) {
+    map.removeLayer(marker);
+  }
+  x=0;
   document.getElementById("map_section").style.display = "none";
   document.getElementById("help_section").style.display = "none";
   document.getElementById("about_section").style.display = "none";
+  document.getElementById("capturing_form").style.display = "none";
   document.getElementById("contact_section").style.display = "block";
+  var popup_choose=document.getElementById('locationsetting')
+  if (popup_choose) {
+    popup_choose.parentNode.removeChild(popup_choose);
+  }
+  var popup_submit=document.getElementById('digitalizeoptions')
+  if (popup_submit) {
+    popup_submit.parentNode.removeChild(popup_submit);
+  }
   closeNav();
 }
